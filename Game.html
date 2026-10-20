@@ -128,6 +128,7 @@ textarea.txt{font-size:14px;min-height:110px;resize:none;font-family:ui-monospac
     <button class="chip" id="homeBtn" type="button">Home</button>
     <button class="chip" id="respawn" type="button">Respawn</button>
     <button class="chip" id="sound" type="button">Sound on</button>
+    <button class="chip" id="gameAboutBtn" type="button">About</button>
   </div>
 </div>
 <div class="chip" id="toast"></div>
@@ -138,6 +139,13 @@ textarea.txt{font-size:14px;min-height:110px;resize:none;font-family:ui-monospac
 <div class="overlay" id="home">
   <div class="homeWrap">
     <div class="logo" id="logo" aria-label="Blockville Obby"></div>
+
+    <div class="row" style="margin: 0 0 12px;">
+      <button class="sec" id="aboutBtn" type="button">
+        About the Game
+      </button>
+    </div>
+
     <div class="panel acctbar">
       <div><b id="hiName">Not signed in</b><div class="hint" id="walletLine"></div></div>
       <div class="row"><button class="sec sm" id="shopBtn" type="button">Shop</button><button class="sec sm" id="acctBtn" type="button">Account</button></div>
@@ -151,6 +159,46 @@ textarea.txt{font-size:14px;min-height:110px;resize:none;font-family:ui-monospac
     <div class="panel"><p class="hint" id="controlsHint"></p></div>
   </div>
 </div>
+
+    <div class="overlay ov2" id="aboutModal" hidden>
+      <div class="card">
+        <h1 class="sm2">About Blockville Obby</h1>
+
+        <p>
+          Welcome to Blockville Obby, an exciting 3D obstacle-course
+          adventure where every jump, challenge, and checkpoint brings
+          you closer to victory!
+        </p>
+
+        <p>
+          Explore colorful worlds, dodge dangerous obstacles, collect
+          coins, unlock new looks, and test your skills across
+          challenging levels and mini-games.
+        </p>
+
+        <p>
+          <strong>Your mission:</strong> Reach the finish line,
+          collect rewards, beat your best times, and become a
+          Blockville champion!
+        </p>
+
+        <div class="panel" style="margin: 16px 0;">
+          <p style="margin-bottom: 5px;">Developed by</p>
+          <h2 style="margin: 0 0 8px; font-size: 27px;">
+            Archimedes Cheruiyot
+          </h2>
+          <p class="hint">
+            Student Developer | BBIT Student |
+            Technology Enthusiast
+          </p>
+          <p class="hint" style="margin-top: 8px;">Version 1.0.0</p>
+        </div>
+
+        <button class="big" id="closeAbout" type="button">
+          Let's Play!
+        </button>
+      </div>
+    </div>
 
 <div class="overlay" id="win" hidden>
   <div class="card">
@@ -395,7 +443,7 @@ var isTouch=matchMedia('(pointer: coarse)').matches||('ontouchstart' in window);
 if(isTouch)document.body.classList.add('touch');
 $('controlsHint').textContent=isTouch
   ? 'Left stick to move, Jump button to jump, drag anywhere else to look around.'
-  : 'WASD or arrows to move, Space to jump, drag to look, R to respawn, Esc for home.';
+  : 'WASD or arrows to move, Space to jump, drag to look, R to respawn, Esc for home, About for Info.';
 
 /* ---------- accounts & save data ---------- */
 var DB={v:3,accounts:{},last:''};
@@ -1101,7 +1149,7 @@ function mkCard(o){
 function buildHome(){
   $('hiName').textContent=acc?acc.name:'Not signed in';
   $('walletLine').textContent=acc?('Coins: '+save.wallet):'Sign in to save your progress';
-  $('tabLevels').classList.toggle('on',homeTab==='levels');
+  $('tabLevels').classList.toggle('on',homeTab==='levels'); 
   $('tabMini').classList.toggle('on',homeTab==='mini');
   var lb=$('levelList'),mb=$('miniList');
   lb.hidden=homeTab!=='levels';mb.hidden=homeTab!=='mini';
@@ -1122,6 +1170,27 @@ function buildHome(){
 }
 $('tabLevels').addEventListener('click',function(){homeTab='levels';buildHome()});
 $('tabMini').addEventListener('click',function(){homeTab='mini';buildHome()});
+
+
+/* ---------- About the game ---------- */
+$('aboutBtn').addEventListener('click', function() {
+  $('aboutModal').hidden = false;
+});
+
+$('closeAbout').addEventListener('click', function() {
+  $('aboutModal').hidden = true;
+});
+
+/* Close when clicking outside the About card */
+$('aboutModal').addEventListener('click', function(e) {
+  if (e.target === $('aboutModal')) {
+    $('aboutModal').hidden = true;
+  }
+});
+$('gameAboutBtn').addEventListener('click', function() {
+  $('aboutModal').hidden = false;
+});
+
 
 function showResult(o){
   $('winTitle').textContent=o.title;$('winLevel').textContent=o.sub;
